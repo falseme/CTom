@@ -13,7 +13,7 @@ static bool isAlive(const std::vector<std::vector<bool>>& alive, int i, int j);
 
 int main() {
 
-	sf::RenderWindow window(sf::VideoMode(800, 600), "Automata Celular");
+	sf::RenderWindow window(sf::VideoMode(800, 600), "Automata Celular", sf::Style::Close);
 	window.setFramerateLimit(10);
 
 	std::vector<std::vector<bool>> alive(rows);
@@ -23,27 +23,51 @@ int main() {
 			alive[i][j] = false;
 	}
 
-	alive[40][30] = true;
 	alive[40][31] = true;
 	alive[41][31] = true;
-	alive[41][32] = true;
 	alive[42][31] = true;
+
+	bool paused = true;
+	std::cout << "Currently Paused" << std::endl;
+	std::cout << "Press [space] to pause/unpause" << std::endl;
+	std::cout << "While paused: Press [mouse RB] to draw and [mouse LB] to erase" << std::endl;
 
 	while (window.isOpen()) {
 
 		sf::Event event;
 		while (window.pollEvent(event)) {
 
-			if (event.type == sf::Event::Closed)
+			switch (event.type) {
+
+			case sf::Event::Closed:
 				window.close();
+				break;
+
+			case sf::Event::KeyPressed:
+				if (event.key.scancode == sf::Keyboard::Scan::Space)
+					paused = !paused;
+				break;
+
+			case sf::Event::MouseButtonPressed:
+				float x = event.mouseButton.x * rows;
+				int i = x / window_width;
+				float y = event.mouseButton.y * cols;
+				int j = y / window_height;
+				if (event.mouseButton.button == sf::Mouse::Left)
+					alive[i][j] = true;
+				else if (event.mouseButton.button == sf::Mouse::Right)
+					alive[i][j] = false;
+				break;
+			}
 
 		}
 
-		window.clear(sf::Color(100, 100, 100, 255));
+		window.clear(sf::Color(32, 32, 32, 255));
 
-		update(alive);
+		if (!paused)
+			update(alive);
+
 		draw(alive, window);
-
 		window.display();
 	}
 
