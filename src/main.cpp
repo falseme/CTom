@@ -14,7 +14,7 @@ static bool isAlive(const std::vector<std::vector<bool>>& alive, int i, int j);
 int main() {
 
 	sf::RenderWindow window(sf::VideoMode(800, 600), "Automata Celular");
-	window.setFramerateLimit(5);
+	window.setFramerateLimit(10);
 
 	std::vector<std::vector<bool>> alive(rows);
 	for (int i = 0; i < rows; i++) {
@@ -23,13 +23,11 @@ int main() {
 			alive[i][j] = false;
 	}
 
-	alive[15][10] = true;
-	alive[15][11] = true;
-	alive[15][12] = true;
-
-	alive[35][20] = true;
-	alive[35][21] = true;
-	alive[35][22] = true;
+	alive[40][30] = true;
+	alive[40][31] = true;
+	alive[41][31] = true;
+	alive[41][32] = true;
+	alive[42][31] = true;
 
 	while (window.isOpen()) {
 
@@ -124,10 +122,14 @@ static void update(std::vector<std::vector<bool>>& alive) {
 
 static bool isAlive(const std::vector<std::vector<bool>>& alive, int i, int j) {
 
-	if (i < 0 || i >= rows)
-		return false;
-	if (j < 0 || j >= cols)
-		return false;
+	if (i < 0)
+		i = rows - 1;
+	else if (i >= rows)
+		i = 0;
+	if (j < 0)
+		j = cols - 1;
+	else if (j >= cols)
+		j = 0;
 
 	return alive[i][j];
 
