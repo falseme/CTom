@@ -7,9 +7,9 @@ const int window_height = 600;
 const int rows = 80;
 const int cols = 60;
 
-static void draw(std::vector<std::vector<bool>>& alive, sf::RenderWindow& rw);
+static void draw(const std::vector<std::vector<bool>>& alive, sf::RenderWindow& rw);
 static void update(std::vector<std::vector<bool>>& alive);
-static bool isAlive(std::vector<std::vector<bool>> alive, int i, int j);
+static bool isAlive(const std::vector<std::vector<bool>>& alive, int i, int j);
 
 int main() {
 
@@ -53,7 +53,7 @@ int main() {
 
 }
 
-static void draw(std::vector<std::vector<bool>>& alive, sf::RenderWindow& rw) {
+static void draw(const std::vector<std::vector<bool>>& alive, sf::RenderWindow& rw) {
 
 	int w = window_width / rows;
 	int h = window_height / cols;
@@ -122,7 +122,7 @@ static void update(std::vector<std::vector<bool>>& alive) {
 
 }
 
-static bool isAlive(std::vector<std::vector<bool>> alive, int i, int j) {
+static bool isAlive(const std::vector<std::vector<bool>>& alive, int i, int j) {
 
 	if (i < 0 || i >= rows)
 		return false;
