@@ -10,6 +10,7 @@ const int cols = 60;
 static void draw(const std::vector<std::vector<bool>>& alive, sf::RenderWindow& rw);
 static void update(std::vector<std::vector<bool>>& alive);
 static bool isAlive(const std::vector<std::vector<bool>>& alive, int i, int j);
+static void drawGrid(sf::RenderWindow& rw);
 
 int main() {
 
@@ -28,9 +29,12 @@ int main() {
 	alive[42][31] = true;
 
 	bool paused = true;
+	bool showGrid = false;
+
 	std::cout << "Currently Paused" << std::endl;
 	std::cout << "Press [space] to pause/unpause" << std::endl;
 	std::cout << "While paused: Press [mouse RB] to draw and [mouse LB] to erase" << std::endl;
+	std::cout << "Press [shift] to show/hide grid" << std::endl;
 
 	while (window.isOpen()) {
 
@@ -46,6 +50,8 @@ int main() {
 			case sf::Event::KeyPressed:
 				if (event.key.scancode == sf::Keyboard::Scan::Space)
 					paused = !paused;
+				if (event.key.scancode == sf::Keyboard::Scan::LShift)
+					showGrid = !showGrid;
 				break;
 
 			case sf::Event::MouseButtonPressed:
@@ -67,6 +73,8 @@ int main() {
 		if (!paused)
 			update(alive);
 
+		if (showGrid)
+			drawGrid(window);
 		draw(alive, window);
 		window.display();
 	}
@@ -88,7 +96,7 @@ static void draw(const std::vector<std::vector<bool>>& alive, sf::RenderWindow& 
 
 			sf::RectangleShape pixel(sf::Vector2f(w, h));
 			pixel.setPosition(sf::Vector2f(i * w, j * h));
-			pixel.setFillColor(sf::Color(255, 255, 255, 255));
+			pixel.setFillColor(sf::Color::White);
 			rw.draw(pixel);
 
 		}
@@ -158,3 +166,26 @@ static bool isAlive(const std::vector<std::vector<bool>>& alive, int i, int j) {
 	return alive[i][j];
 
 }
+
+static void drawGrid(sf::RenderWindow& rw) {
+
+	int xgap = window_width / rows;
+	int ygap = window_height / cols;
+	int color = 56;
+
+	for (int i = 0; i < rows; i++) {
+		sf::RectangleShape line(sf::Vector2f(1, window_height));
+		line.setPosition(sf::Vector2f(xgap * i, 0));
+		line.setFillColor(sf::Color(color, color, color, 255));
+		rw.draw(line);
+	}
+
+	for (int j = 0; j < cols; j++) {
+		sf::RectangleShape line(sf::Vector2f(window_width, 1));
+		line.setPosition(sf::Vector2f(0, ygap * j));
+		line.setFillColor(sf::Color(color, color, color, 255));
+		rw.draw(line);
+	}
+
+}
+
